@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bici — entrar</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="login-body">
+  <main class="login-card">
+    <h1 class="login-title">bici</h1>
+    <p class="login-sub">notas, citas, capturas</p>
+
+    <form method="post" action="/login" class="login-form">
+      <input
+        type="password"
+        name="password"
+        placeholder="contraseña"
+        autofocus
+        required
+        autocomplete="current-password"
+      />
+      <button type="submit" class="btn-primary">entrar con contraseña</button>
+    </form>
+
+    <div class="login-divider"><span>o</span></div>
+
+    <a href="/" class="btn-secondary">solo mirar</a>
+
+    <p id="err" class="login-err"></p>
+    <p style="margin-top:28px;font-size:0.72rem;color:var(--muted);">
+      <a href="/aviso-legal.html" style="color:var(--muted);">aviso legal</a>
+    </p>
+  </main>
+  <script>
+    if (new URLSearchParams(location.search).get('e')) {
+      document.getElementById('err').textContent = 'contraseña incorrecta';
+    }
+  </script>
+</body>
+</html>

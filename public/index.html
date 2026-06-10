@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bici</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <button id="menuBtn" class="menu-btn" aria-label="menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+
+  <div id="menuPanel" class="menu-panel" hidden>
+    <input id="searchBox" type="search" placeholder="buscar…" class="menu-search" />
+    <a href="/compose" class="menu-link" data-authed-only hidden>✍️ publicar (modo ligero)</a>
+    <a href="/places" class="menu-link" data-authed-only hidden>📍 sitios guardados</a>
+    <button id="toggleSidebar" class="menu-link as-btn" data-authed-only hidden>mostrar #tags</button>
+    <div class="menu-divider"></div>
+    <a href="/api/export" class="menu-link" data-authed-only hidden>export json</a>
+    <div class="menu-divider" data-authed-only hidden></div>
+    <a href="/login.html" class="menu-link" data-anon-only hidden>iniciar sesión</a>
+    <form method="post" action="/logout" class="menu-form" data-authed-only hidden>
+      <button type="submit" class="menu-link as-btn">salir</button>
+    </form>
+    <div class="menu-divider"></div>
+    <a href="/aviso-legal.html" class="menu-link">aviso legal</a>
+  </div>
+
+  <div class="layout" id="layout">
+    <main class="main-col">
+      <form id="composer" class="composer" data-authed-only hidden>
+        <textarea id="text" placeholder="¿dónde dejaste la bici? añade una foto y la ubicación… usa #tags"></textarea>
+        <div id="mediaPreview" class="media-preview"></div>
+        <div class="composer-foot">
+          <label class="file-btn">
+            foto
+            <input id="fileInput" type="file" accept="image/*" multiple hidden />
+          </label>
+          <button type="button" id="btnGeo" class="geo-btn rec-btn" aria-label="añadir ubicación">ubicación</button>
+          <input type="text" id="locInput" class="loc-input" placeholder="nombre del sitio (opcional)" maxlength="120" aria-label="nombre del sitio" hidden />
+          <button type="button" id="btnGeoClear" class="geo-clear link-btn" aria-label="quitar ubicación" title="quitar ubicación" hidden>✕</button>
+          <span class="grow"></span>
+          <button type="submit" id="btnPost" class="btn-primary">publicar</button>
+        </div>
+      </form>
+
+      <div id="filterBanner" class="filter-banner" hidden></div>
+      <div id="timeline" class="timeline">
+        <div class="thread skeleton" aria-hidden="true">
+          <div class="sk-line sk-w50"></div>
+          <div class="sk-line sk-w90"></div>
+          <div class="sk-line sk-w70"></div>
+        </div>
+        <div class="thread skeleton" aria-hidden="true">
+          <div class="sk-line sk-w50"></div>
+          <div class="sk-line sk-w90"></div>
+        </div>
+        <div class="thread skeleton" aria-hidden="true">
+          <div class="sk-line sk-w50"></div>
+          <div class="sk-line sk-w70"></div>
+          <div class="sk-line sk-w90"></div>
+        </div>
+      </div>
+      <button id="loadMore" class="load-more" hidden>cargar más</button>
+    </main>
+
+    <aside id="sideCol" class="side-col" data-authed-only hidden>
+      <h2>#tags</h2>
+      <ul id="tagList" class="tag-list"></ul>
+    </aside>
+  </div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

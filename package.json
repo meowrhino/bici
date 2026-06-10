@@ -1,0 +1,26 @@
+{
+  "name": "bici",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:create": "wrangler d1 create bici-db",
+    "db:schema": "wrangler d1 execute bici-db --local --file=schema.sql",
+    "db:schema:remote": "wrangler d1 execute bici-db --remote --file=schema.sql",
+    "r2:create": "wrangler r2 bucket create bici-storage"
+  },
+  "dependencies": {
+    "hono": "^4.6.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240620.0",
+    "better-sqlite3": "^12.10.0",
+    "happy-dom": "^20.9.0",
+    "typescript": "^5.5.0",
+    "vitest": "^4.1.7",
+    "wrangler": "^4.69.0"
+  }
+}

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bici · publicar</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚲</text></svg>" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body class="compose-page">
+  <div class="layout">
+    <main class="main-col">
+      <p class="compose-nav"><a href="/">← volver al timeline</a></p>
+      <form id="composer" class="composer">
+        <textarea id="text" placeholder="¿dónde dejaste la bici? añade una foto y la ubicación… usa #tags"></textarea>
+        <div id="mediaPreview" class="media-preview"></div>
+        <div class="composer-foot">
+          <label class="file-btn">
+            foto
+            <input id="fileInput" type="file" accept="image/*" multiple hidden />
+          </label>
+          <button type="button" id="btnGeo" class="geo-btn rec-btn" aria-label="añadir ubicación">ubicación</button>
+          <input type="text" id="locInput" class="loc-input" placeholder="nombre del sitio (opcional)" maxlength="120" aria-label="nombre del sitio" hidden />
+          <button type="button" id="btnGeoClear" class="geo-clear link-btn" aria-label="quitar ubicación" title="quitar ubicación" hidden>✕</button>
+          <span class="grow"></span>
+          <button type="submit" id="btnPost" class="btn-primary">publicar</button>
+        </div>
+      </form>
+    </main>
+  </div>
+
+  <script type="module" src="/compose.js"></script>
+</body>
+</html>
