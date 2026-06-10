@@ -1,0 +1,10 @@
+/* ---------- columna estrecha centrada (páginas legales) ---------- */
+
+/* .single-post era el contenedor de la vista /post/:id (eliminada); hoy lo
+   reutiliza aviso-legal.html como columna estrecha centrada. */
+.single-post {
+  max-width: 640px;
+  margin: 64px auto 0;
+  padding: 0 24px 40vh;
+}
+

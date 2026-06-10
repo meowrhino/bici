@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #0d0c0a;
+  --bg-warm: #100e0b;
+  --surface: #16130f;
+  --border: #2a2622;
+  --hairline: #221e1a;
+  --text: #d8d2c4;
+  --text-dim: #a89e8b;
+  --muted: #6b6357;
+  --faint: #3a342d;
+  --accent: #c0c3c9;
+  --accent-dim: #8a8e95;
+  --danger: #d97a6a;
+  --dots: #1a1612;
+  --mono: 'JetBrains Mono', 'Menlo', monospace;
+  /* geometría del rail vertical y la sangría — cualquier cambio aquí
+     propaga automáticamente al mini-rail amarillo (que usa calc()). */
+  --post-pad-x: 16px;   /* padding-left del .post */
+  --rail-x: 6px;        /* X del rail dentro del .post */
+  --indent-x: 14px;     /* sangría que añade cada .thread-replies */
+  /* easing estándar del proyecto — Material "decelerate". Cambios aquí
+     propagan a todas las transitions/animations sin tener que hacer
+     find&replace en cubic-bezier strings. */
+  --curve-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  /* escala de radios — los valores dominantes del proyecto. (El 3px puntual
+     de algún thumb se deja literal: no encaja en la escala y cambiarlo
+     alteraría el redondeo.) Nota: NO hay escala de spacing tokenizada a
+     propósito — los paddings/gaps reales (1/6/10/32px además de 4/8/12/16)
+     no caen en una rejilla base-4, así que tokenizarlos sería una escala
+     falsa sin la ganancia de consistencia. Se dejan como literales. */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 12px;
+  /* velo del acento sobre fondos (hover de posts y rail). Repetido en 2 sitios. */
+  --accent-overlay-light: rgba(192, 195, 201, 0.04);
+}
+
+/* ============================================================
+   ÍNDICE (orden de este archivo)
+     1. reset + :root  — tokens: color, fuentes, geometría del rail
+     2. toast
+     3. buttons         — botones, inputs, textarea
+     4. login
+     5. menu            — hamburguesa + panel
+     6. layout          — grid, sidebar, overrides @media móvil
+     7. composer        — caja de escribir (+ botón grabar)
+     8. EL CARRETE (.post) — todo junto, en orden de aparición:
+          · timeline / skeletons / .post + rail gris
+          · post · pie (#id · fecha · toggle de respuestas)
+          · post · barra de acciones
+          · post · estado activo + rail amarillo
+          · post · composer de respuesta inline
+          · timeline · cargar más
+     9. media           — gallery, lightbox, audio player + transcript
+    10. páginas legales — columna estrecha
+    11. encuestas       — display + bloque del composer
+   ============================================================ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html, body { height: 100%; }
+
+body {
+  font-family: var(--mono);
+  background-color: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Textura de fondo (viñeta central + puntitos) anclada al VIEWPORT mediante un
+   pseudo-elemento position:fixed. Antes era `background-attachment: fixed` en el
+   body, pero el WebKit de iOS (Brave/Safari en iPhone) dimensiona ese fondo
+   contra TODO el documento, no contra el viewport: la elipse en % caía a media
+   página y se veían bandas (lisa vs punteada) que se desplazaban al hacer
+   scroll. Un elemento fixed real lo fija bien en todos los navegadores.
+   z-index:-1 lo deja detrás del contenido; pointer-events:none, inofensivo. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 55% 50% at 50% 45%, var(--bg) 0%, var(--bg) 30%, transparent 75%),
+    radial-gradient(var(--dots) 1px, transparent 1px);
+  background-size: auto, 22px 22px;
+  background-position: 0 0, 0 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px dotted transparent;
+}
+a:hover { border-bottom-color: var(--accent-dim); }
+
+/* focus-visible: anillo de foco solo cuando se navega con teclado
+   (no aparece al hacer click), siguiendo el estándar UA pero con el
+   color de acento del sitio. esencial para a11y de los .post[role=link]. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* respeta prefers-reduced-motion: usuarios con sensibilidad al movimiento
+   o ahorro de batería ven la UI sin transiciones. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

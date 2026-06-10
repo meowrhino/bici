@@ -1,0 +1,70 @@
+/* ---------- layout ---------- */
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 32px;
+  max-width: 880px;
+  margin: 64px auto 0;
+  /* padding-bottom generoso (no margin para evitar margin-collapse hacia
+     fuera del body): deja respirar al final del scroll, para que el último
+     twoitt no quede pegado al borde inferior del viewport. */
+  padding: 0 24px 40vh;
+}
+
+body.anon .layout,
+body.sidebar-hidden .layout {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 620px;
+}
+body.anon .side-col,
+body.sidebar-hidden .side-col { display: none; }
+
+.main-col { min-width: 0; }
+
+.side-col {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  position: sticky;
+  top: 64px;
+  align-self: start;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.side-col h2 {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+.tag-list { list-style: none; }
+.tag-list li { padding: 1px 0; }
+.tag-list a {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 8px;
+  border-radius: 3px;
+  color: var(--text-dim);
+  border-bottom: none;
+}
+.tag-list a:hover {
+  background: var(--bg-warm);
+  color: var(--accent);
+}
+.tag-list a.active { color: var(--accent); background: var(--bg-warm); }
+.tag-list .count { color: var(--muted); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 720px) {
+  /* override de --indent-x: la sangría de cada nivel pasa a 10px en móvil
+     para que los niveles profundos sigan cabiendo. propaga automáticamente
+     porque .thread-replies usa var(--indent-x). */
+  :root { --indent-x: 10px; }
+  .layout { grid-template-columns: minmax(0, 1fr); padding: 0 18px; }
+  .side-col { position: static; max-height: none; margin-top: 20px; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag-list li { padding: 0; }
+  .menu-btn { top: 12px; right: 12px; }
+  .menu-panel { top: 56px; right: 12px; left: 12px; min-width: 0; }
+}
+

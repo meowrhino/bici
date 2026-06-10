@@ -1,0 +1,64 @@
+/* ---------- páginas ligeras (/compose, /places) ---------- */
+
+.compose-nav {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  margin: 4px 0 16px;
+}
+.places-title {
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+.places-help {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+.places-empty {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+}
+.places-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* Una fila por sitio: nombre editable + radio + link a mapa + guardar/borrar.
+   Envuelve en móvil (flex-wrap) para no apretar los controles. */
+.place-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.place-row .place-name { flex: 1 1 12ch; max-width: none; }
+.place-radius {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.place-radius-input {
+  width: 7ch;
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+}
+.place-map {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.place-map:hover { color: var(--accent); }

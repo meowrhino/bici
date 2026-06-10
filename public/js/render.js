@@ -72,11 +72,6 @@ function renderLocation(p) {
   return `<span class="post-loc">📍 ${label}</span>`;
 }
 
-// ----- encuesta -----
-// El markup (renderPoll) y el wiring de voto (bindPollActions) viven ahora en
-// render-poll.js; renderPost los invoca vía import. Se extrajeron por ser un
-// subsistema (UI de encuestas) ajeno al render de hilos/activación de aquí.
-
 // ----- bindings (encadenan eventos a un .post ya pintado) -----
 
 // Modelo unificado desktop+touch: un click sobre el .post-body añade
