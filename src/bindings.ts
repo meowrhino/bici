@@ -11,6 +11,10 @@ export type Bindings = {
   ASSETS: Fetcher;
   PASSWORD: string;
   AUTH_SECRET: string;
+  // Usuario de acceso. Opcional: si no se define, vale "manu" (ver routes/auth).
+  // No es secreto (el password sí) — solo da el par usuario+contraseña que los
+  // gestores de contraseñas saben guardar y autorrellenar.
+  USERNAME?: string;
   WRITE_LIMITER: RateLimit;
 };
 

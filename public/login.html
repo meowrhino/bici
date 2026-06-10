@@ -12,18 +12,28 @@
 <body class="login-body">
   <main class="login-card">
     <h1 class="login-title">bici</h1>
-    <p class="login-sub">notas, citas, capturas</p>
+    <p class="login-sub">dónde dejé la bici</p>
 
     <form method="post" action="/login" class="login-form">
+      <input
+        type="text"
+        name="username"
+        placeholder="usuario"
+        autofocus
+        required
+        autocomplete="username"
+        autocapitalize="none"
+        autocorrect="off"
+        spellcheck="false"
+      />
       <input
         type="password"
         name="password"
         placeholder="contraseña"
-        autofocus
         required
         autocomplete="current-password"
       />
-      <button type="submit" class="btn-primary">entrar con contraseña</button>
+      <button type="submit" class="btn-primary">entrar</button>
     </form>
 
     <div class="login-divider"><span>o</span></div>
@@ -37,7 +47,7 @@
   </main>
   <script>
     if (new URLSearchParams(location.search).get('e')) {
-      document.getElementById('err').textContent = 'contraseña incorrecta';
+      document.getElementById('err').textContent = 'usuario o contraseña incorrectos';
     }
   </script>
 </body>
