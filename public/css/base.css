@@ -16,7 +16,7 @@
   --dots: #1a1612;
   --mono: 'JetBrains Mono', 'Menlo', monospace;
   /* geometría del rail vertical y la sangría — cualquier cambio aquí
-     propaga automáticamente al mini-rail amarillo (que usa calc()). */
+     propaga automáticamente al mini-rail plata (que usa calc()). */
   --post-pad-x: 16px;   /* padding-left del .post */
   --rail-x: 6px;        /* X del rail dentro del .post */
   --indent-x: 14px;     /* sangría que añade cada .thread-replies */
@@ -51,7 +51,7 @@
           · timeline / skeletons / .post + rail gris
           · post · pie (#id · fecha · toggle de respuestas)
           · post · barra de acciones
-          · post · estado activo + rail amarillo
+          · post · estado activo + rail plata
           · post · composer de respuesta inline
           · timeline · cargar más
      9. media           — gallery, lightbox, audio player + transcript

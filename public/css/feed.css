@@ -93,7 +93,7 @@
 .post.clickable > .post-body:hover {
   background: var(--accent-overlay-light);
 }
-/* Rail estructural en amarillo cuando el .post-body propio está en hover.
+/* Rail estructural en plata cuando el .post-body propio está en hover.
    :has() con :hover está bien soportado en browsers modernos; a diferencia
    del caso de .thread-has-active (donde :has() se evitó por bugs de
    invalidación al toggle de clases vía JS), aquí el estado :hover lo
@@ -317,7 +317,7 @@
 .post-actions .hide-btn:hover { color: var(--text-dim); }
 .post-actions .delete-btn:hover { color: var(--danger); }
 
-/* ---------- post · estado activo + rail amarillo ---------- */
+/* ---------- post · estado activo + rail plata ---------- */
 
 /* .active: un click sobre el .post-body añade esta clase.
    El alpha del fondo es el doble que el de hover (0.08 vs 0.04), así
@@ -330,7 +330,7 @@
   background: rgba(192, 195, 201, 0.08);
   border-radius: var(--radius-sm);
 }
-/* Rail amarillo del twoitt activo: ::after del root del thread con FILL
+/* Rail plata del twoitt activo: ::after del root del thread con FILL
    animation desde arriba. Position absolute dentro del root (que tiene
    position:relative). Las CSS vars --active-rail-{top,left,height} las
    setea paintActiveRail() en render.js, midiendo el active relativo al
@@ -387,7 +387,7 @@
   max-height: 60px;
   /* padding-bottom: 0 → los botones quedan flush contra el bottom de la
      caja, que coincide con el bottom del .post y con el bottom del rail.
-     Sin esto, el padding-bottom dejaba ~10px de cola amarilla por debajo
+     Sin esto, el padding-bottom dejaba ~10px de cola plata por debajo
      de los botones (la caja de .post-actions era más alta que el texto). */
   padding: 10px var(--post-pad-x) 0;
 }

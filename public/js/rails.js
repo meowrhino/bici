@@ -5,7 +5,7 @@
 // composer-anim.js). La implementación vive ahora en tres módulos, con la
 // dependencia en una sola dirección thread-tracking → height-anim →
 // rail-geometry (hoja):
-//   - rail-geometry.js  — ciclo de vida + geometría del rail activo (amarillo),
+//   - rail-geometry.js  — ciclo de vida + geometría del rail activo (plata),
 //     .extends-to-bottom del rail estructural (gris), el ResizeObserver y las
 //     animaciones diferidas (switch/close/lockstep). Toda la state mutable de
 //     módulo (observedRoot, pendingTimers, railObserver, lockstepTimer) vive

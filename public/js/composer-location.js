@@ -6,7 +6,7 @@
 // enseña las coordenadas. El link del pie abre en una app de mapa.
 //
 // Compartido por el composer principal (markup en index.html) y el inline
-// (markup inyectado vía locationControlMarkup()), igual que composer-poll.js.
+// (markup inyectado vía locationControlMarkup()).
 // La parte de GPS NO es testeable headless (igual que F6/F7) → se verifica en
 // Brave.
 

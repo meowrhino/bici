@@ -1,4 +1,4 @@
-// ----- rail activo (amarillo): ciclo de vida, geometría y animaciones diferidas -----
+// ----- rail activo (plata): ciclo de vida, geometría y animaciones diferidas -----
 //
 // El rail vertical de cada .post tiene dos capas:
 //   - estructural (gris): CSS puro. .post::before con top:14px y bottom:0 se
@@ -6,7 +6,7 @@
 //     derecha" llevan .extends-to-bottom y llegan al bottom del thread (vía
 //     bottom:-9999px + el overflow:hidden del root). La marca la pone
 //     markExtendsToBottom (abajo), recalculada en cada add/delete.
-//   - activo (amarillo): el ::after del root del thread, posicionado con CSS
+//   - activo (plata): el ::after del root del thread, posicionado con CSS
 //     vars (--active-rail-{top,left,height}) que mide y setea paintActiveRail.
 //     Un ResizeObserver lo repinta cuando el root activo cambia de altura.
 //
@@ -18,7 +18,7 @@
 // Un .post está en la "rama extrema derecha" si no tiene hermanos .post
 // posteriores ni él ni ninguno de sus ancestros hasta el root. Los .post
 // que cumplen esto llevan la clase .extends-to-bottom y su rail (gris vía
-// CSS, y amarillo vía paintActiveRail) se extiende hasta el bottom del
+// CSS, y plata vía paintActiveRail) se extiende hasta el bottom del
 // thread; los demás se cortan en el bottom de su propio .post para no
 // atravesar visualmente a hermanos posteriores que queden a menos
 // profundidad (caso típico: #97 depth 3 con #98 depth 2 debajo).
@@ -49,11 +49,11 @@ export function markExtendsToBottom(threadRoot) {
   }
 }
 
-// ----- rail activo (amarillo) -----
+// ----- rail activo (plata) -----
 
 // Mide el .active relativo al .post root del thread y devuelve las coords
 // (px, relativas al root) que el ::after del root necesita para pintar el
-// rail amarillo. height depende de si el activo lleva .extends-to-bottom
+// rail plata. height depende de si el activo lleva .extends-to-bottom
 // (ver arriba): si sí, llega al bottom del root; si no, al bottom del
 // propio activo.
 function measureRail(rootPost, activePost) {
@@ -263,7 +263,7 @@ export function lockstepRail(duration = 360) {
 // El ResizeObserver y observedRoot son estado de módulo con referencia FUERTE
 // al .post root activo; si ese root (o un ancestro) se borra, quedarían
 // apuntando a un nodo detached hasta la siguiente activación, y si el borrado
-// fue el propio .active, el rail amarillo se quedaría "colgado" sobre el hueco.
+// fue el propio .active, el rail plata se quedaría "colgado" sobre el hueco.
 // releaseRail detecta ambos casos y limpia:
 //   - root detached (se borró él o su .thread)      → suelta observer + timer
 //   - root vivo pero ya sin ningún .active dentro    → apaga el rail al instante

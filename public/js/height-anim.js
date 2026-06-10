@@ -90,7 +90,7 @@ function animateRepliesClose(nested) {
 
 // Toggle de colapso del subárbol de replies de un BLOQUE. Colapsado por
 // defecto (.replies-collapsed → display:none en CSS). Anima la altura con la
-// misma curva que el reply-inline y deja el riel amarillo en lockstep. Lo usan
+// misma curva que el reply-inline y deja el riel plata en lockstep. Lo usan
 // el render inicial (render.js) y syncRootToggle al crear el botón.
 export function bindRepliesToggle(toggle, nested) {
   toggle.addEventListener('click', (e) => {

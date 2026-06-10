@@ -1,7 +1,7 @@
 // ----- animación de apertura/cierre del composer inline (reply) -----
 //
 // El composer inline crece/encoge en altura (0 ↔ natural) + fade, con la MISMA
-// curva y duración que el rail amarillo, de modo que ambos se mueven juntos.
+// curva y duración que el rail plata, de modo que ambos se mueven juntos.
 // lockstepRail (rails.js) pega el rail a esta animación frame a frame mientras
 // dura. height:auto no es animable en CSS, así que medimos la altura natural y
 // animamos con la Web Animations API; al terminar, el form vuelve a su CSS

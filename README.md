@@ -14,7 +14,7 @@ dejar lo esencial. Color de resalte: **plata** en vez del amarillo original.
 - **Cloudflare Workers** (Hono, TypeScript) — `src/`
 - **D1** (SQLite) para posts/media/hashtags/places
 - **R2** para las fotos (servidas vía `/r2/*`)
-- Frontend **vanilla JS** (ES modules) + un único `style.css` — `public/`
+- Frontend **vanilla JS** (ES modules) + CSS en partials (`public/css/*.css`, enlazados por página)
 - Sin framework, sin bundler.
 
 ## Desarrollo local
@@ -51,8 +51,19 @@ npm test    # vitest
 ## Estructura
 
 ```
-src/                worker: index.ts (rutas), db.ts (D1), media.ts, auth.ts, geo.ts, hashtags.ts
-public/             frontend estático (index.html, compose.html, app.js, js/*, style.css)
+src/
+  index.ts          ensamblador Hono (registra las rutas en orden)
+  routes/           auth, posts, places, upload, static (una función registerX por archivo)
+  bindings.ts       tipos de bindings (D1/R2/ASSETS/rate-limit) + OWNER_ID
+  middleware.ts     requireCsrf, rateLimit, parseId
+  posts.ts          validatePostBody / persistPost (sin HTTP)
+  db/               data layer D1 por entidad: posts, media, hashtags, places, export + shared (helpers) + index (barrel)
+  media.ts, auth.ts, geo.ts, hashtags.ts
+public/
+  index.html, compose.html, login.html, places.html, aviso-legal.html
+  app.js, compose.js, places.js
+  js/               módulos ES (render, gallery, rails*, composer*, etc.)
+  css/              partials por sección, enlazados por página (base primero)
 schema.sql          esquema de la D1 (fuente única para crear la BD desde cero)
 wrangler.toml       config del Worker (bindings, dominio, rate limit)
 ```

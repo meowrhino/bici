@@ -5,7 +5,7 @@
 //   - bindPostClickToNavigate + setupTapToActivate (flujo de .active)
 //   - syncThreadActiveFlags (clase .thread-has-active en el root)
 //
-// Todo lo que toca el RAIL (geometría del rail amarillo, .extends-to-bottom
+// Todo lo que toca el RAIL (geometría del rail plata, .extends-to-bottom
 // del rail gris, el ResizeObserver) vive en rails.js; aquí sólo lo invocamos.
 // Las barras de acciones (responder/ocultar/borrar/transcribir/ver twoitt)
 // y sus handlers viven en post-actions.js — render.js sólo invoca su API.
@@ -166,8 +166,8 @@ export function focusPostFromHash(behavior = 'smooth') {
 // Mantiene la clase .thread-has-active en el .post root de cada thread cuando
 // él o cualquier descendiente está .active. Esa clase:
 //   1. Muestra la barra de .post-actions (child directo del root)
-//   2. Activa el ::after del root que pinta el rail amarillo animado
-// Además gobierna la animación del rail amarillo con UNA sola gramática:
+//   2. Activa el ::after del root que pinta el rail plata animado
+// Además gobierna la animación del rail plata con UNA sola gramática:
 //   - encender (no estaba activo)        → paintActiveRail: crece desde arriba
 //   - cambiar de twoitt (otro .active)   → paintActiveRail: el viejo desaparece
 //     de golpe y el nuevo crece desde arriba en su posición (cambiar = apagar

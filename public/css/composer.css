@@ -55,8 +55,7 @@
   overflow: hidden;
   border: 1px solid var(--hairline);
 }
-.media-preview .item img,
-.media-preview .item video {
+.media-preview .item img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -76,27 +75,9 @@
   font-size: 0.85rem;
   line-height: 1;
 }
-/* botón "recortar": gemelo del ×, pero arriba-izquierda y con texto. Abre el
-   editor de medios (editor.js, cableado por delegación global). */
-.media-preview .item .edit {
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  padding: 2px 7px;
-  border-radius: var(--radius-sm);
-  background: rgba(0,0,0,0.75);
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  line-height: 1.4;
-  z-index: 1;
-}
-.media-preview .item .edit:hover { color: var(--accent); }
 /* overlay de estado: barra de progreso + etiqueta sobre el thumbnail.
    Hidden por defecto, .visible al activar. Indeterminada anima el fill
-   por toda la barra cuando no hay percent (loading ffmpeg, upload). */
+   por toda la barra cuando no hay percent (compresión / subida). */
 .media-preview .item .status {
   position: absolute;
   left: 0;
@@ -155,11 +136,10 @@
   text-overflow: ellipsis;
 }
 
-/* ---------- composer · botón grabar ---------- */
+/* ---------- composer · botón auxiliar (.rec-btn) ---------- */
 
-/* Botón "grabar" en el composer: gemelo visual de .file-btn pero con un
-   estado rojizo cuando está grabando (.is-recording). Se anima el borde
-   para feedback inequívoco mientras MediaRecorder está activo. */
+/* Botón base gemelo visual de .file-btn. Lo reutiliza el control de ubicación
+   (el botón "ubicación" lleva class="geo-btn rec-btn"). */
 .rec-btn {
   display: inline-block;
   padding: 6px 12px;
@@ -172,18 +152,6 @@
   color: var(--text-dim);
 }
 .rec-btn:hover { border-color: var(--accent); color: var(--accent); }
-.rec-btn.is-recording {
-  border-color: var(--danger, #d33);
-  color: var(--danger, #d33);
-  animation: recPulse 1.2s ease-in-out infinite;
-}
-@keyframes recPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(211, 51, 51, 0.35); }
-  50%      { box-shadow: 0 0 0 4px rgba(211, 51, 51, 0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rec-btn.is-recording { animation: none; }
-}
 
 /* Control de ubicación del composer: un input de texto (etiqueta opcional) +
    el botón "ubicación" (.geo-btn, gemelo visual de .rec-btn). El input es mono

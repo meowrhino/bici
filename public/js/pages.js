@@ -205,9 +205,6 @@ export function setupTimelineComposer() {
     text: $('#text'),
     preview: $('#mediaPreview'),
     fileInput: $('#fileInput'),
-    recordBtn: $('#btnRecord'),
-    pollEl: $('#composerPoll'),
-    pollBtn: $('#btnPoll'),
     parentId: null,
     onPosted: (post) => {
       const el = renderThread(post);

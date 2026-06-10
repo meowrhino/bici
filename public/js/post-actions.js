@@ -4,7 +4,7 @@
 // crecía con tres responsabilidades distintas:
 //   - render del HTML de los posts (lo que renderPost/renderThread hace)
 //   - flujo de activación/click (bindPostClickToNavigate, syncThreadActiveFlags)
-//   - acciones del usuario sobre un post (responder, ocultar, borrar, transcribir)
+//   - acciones del usuario sobre un post (responder, ocultar, borrar)
 // Este archivo se queda con la tercera. render.js le delega via imports.
 
 import { api } from './api.js';
@@ -17,8 +17,8 @@ import { hide, unhide, markPostHidden, unmarkPostHidden } from './hidden.js';
 // ----- render HTML de las barras -----
 
 // Barra única por thread (timeline / replies anidados). Renderiza TODOS los
-// botones disponibles según auth; "transcribir" se muestra/oculta dinámicamente
-// según el .post.active vigente (refreshThreadTranscribeBtn).
+// botones disponibles según auth; "ocultar"/"desocultar" se intercambian según
+// el .post.active vigente (refreshThreadHideBtn).
 export function renderThreadActionsHtml() {
   const view = '<button class="vertwoitt-btn" type="button">ver sitio</button>';
   const reply = isAuthed() ? '<button class="reply-btn" type="button">responder</button>' : '';
@@ -90,8 +90,8 @@ function openReplyComposer(targetEl, parentId) {
 }
 
 // Muestra "ocultar" o "desocultar" en la barra del thread según si el .post
-// objetivo está oculto. Mismo patrón que refreshThreadTranscribeBtn: se llama
-// al activar un post (render.js) para que la barra refleje su estado.
+// objetivo está oculto. Se llama al activar un post (render.js) para que la
+// barra refleje su estado.
 export function refreshThreadHideBtn(postEl) {
   const host = getThreadHost(postEl);
   const bar = host?.querySelector(':scope > .post-actions');
@@ -152,7 +152,7 @@ function removeFromDom(targetEl, ctx = null) {
   } else {
     targetEl.closest('.thread')?.remove() || targetEl.remove();
   }
-  // Si el twoitt borrado/ocultado era el .active (o su thread), el rail amarillo
+  // Si el twoitt borrado/ocultado era el .active (o su thread), el rail plata
   // quedaría colgado y el ResizeObserver apuntando a un nodo detached. releaseRail
   // lo suelta; no-op si seguía habiendo otro .active (se borró un twoitt distinto).
   releaseRail();

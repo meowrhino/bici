@@ -101,7 +101,7 @@ export function prefersReducedMotion() {
     && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 }
 
-// Curva y duración compartidas de las animaciones de altura (rail amarillo,
+// Curva y duración compartidas de las animaciones de altura (rail plata,
 // acordeón de replies, composer inline). DEBEN coincidir para que se muevan
 // "juntos"; centralizadas aquí para no tener el literal en 3 sitios. El token CSS
 // --curve-standard espeja la misma curva (cliente y CSS no se pueden DRYear sin
