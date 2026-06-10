@@ -20,7 +20,6 @@ function placeRow(p) {
     <input type="text" class="place-name loc-input" maxlength="120" value="${escapeHtml(p.name)}" aria-label="nombre del sitio" />
     <label class="place-radius">radio <input type="number" class="place-radius-input" min="10" max="100000" step="10" value="${Number(p.radius)}" aria-label="radio en metros" /> m</label>
     <a class="place-map" href="${mapUrl}" target="_blank" rel="noopener noreferrer" title="ver en el mapa">📍 ${escapeHtml(Number(p.lat).toFixed(4))}, ${escapeHtml(Number(p.lng).toFixed(4))}</a>
-    <span class="grow"></span>
     <button type="button" class="place-save btn-primary">guardar</button>
     <button type="button" class="place-del link-btn">borrar</button>
   `;

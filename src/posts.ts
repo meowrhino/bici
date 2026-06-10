@@ -98,9 +98,11 @@ export async function validatePostBody(
 // Valida un par lat/lng. Devuelve ambos como número solo si los dos son finitos
 // y caen en rango geográfico; en cualquier otro caso devuelve ambos null.
 function parseCoords(rawLat: unknown, rawLng: unknown): { lat: number | null; lng: number | null } {
-  // null/undefined/"" = "no vino coord". OJO: Number(null) === 0, así que sin
-  // este guard un post con SOLO etiqueta acabaría con lat/lng 0,0 espurios.
-  if (rawLat == null || rawLng == null || rawLat === "" || rawLng === "")
+  // Solo aceptamos número o string numérico. Descarta null/undefined/""/bool/
+  // objeto: sin esto, Number(null)===0 y Number(false)===0 colaban un punto
+  // espurio en Null Island (0,0) para un post con solo etiqueta de texto.
+  const okType = (v: unknown) => typeof v === "number" || typeof v === "string";
+  if (!okType(rawLat) || !okType(rawLng) || rawLat === "" || rawLng === "")
     return { lat: null, lng: null };
   const lat = Number(rawLat);
   const lng = Number(rawLng);

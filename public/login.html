@@ -15,7 +15,9 @@
     <p class="login-sub">dónde dejé la bici</p>
 
     <form method="post" action="/login" class="login-form">
+      <label class="sr-only" for="login-user">usuario</label>
       <input
+        id="login-user"
         type="text"
         name="username"
         placeholder="usuario"
@@ -26,7 +28,9 @@
         autocorrect="off"
         spellcheck="false"
       />
+      <label class="sr-only" for="login-pass">contraseña</label>
       <input
+        id="login-pass"
         type="password"
         name="password"
         placeholder="contraseña"
@@ -40,7 +44,7 @@
 
     <a href="/" class="btn-secondary">solo mirar</a>
 
-    <p id="err" class="login-err"></p>
+    <p id="err" class="login-err" role="alert" aria-live="polite"></p>
     <p style="margin-top:28px;font-size:0.72rem;color:var(--muted);">
       <a href="/aviso-legal.html" style="color:var(--muted);">aviso legal</a>
     </p>

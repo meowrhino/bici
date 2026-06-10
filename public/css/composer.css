@@ -27,7 +27,7 @@
   gap: 8px 10px;
 }
 /* Espaciador flexible del foot: empuja "publicar" (y cancelar/responder en el
-   inline) a la derecha, dejando los botones de adjuntar/grabar/etc. a la izquierda. */
+   inline) a la derecha, dejando los botones de foto/ubicación a la izquierda. */
 .composer-foot .grow { flex: 1; }
 .file-btn {
   display: inline-block;

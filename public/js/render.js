@@ -7,8 +7,8 @@
 //
 // Todo lo que toca el RAIL (geometría del rail plata, .extends-to-bottom
 // del rail gris, el ResizeObserver) vive en rails.js; aquí sólo lo invocamos.
-// Las barras de acciones (responder/ocultar/borrar/transcribir/ver twoitt)
-// y sus handlers viven en post-actions.js — render.js sólo invoca su API.
+// Las barras de acciones (responder/ocultar/borrar/ver sitio) y sus handlers
+// viven en post-actions.js — render.js sólo invoca su API.
 
 import { fmt, hoursAgo, escapeHtml, linkify } from './utils.js';
 import { renderPostGallery } from './gallery.js';
