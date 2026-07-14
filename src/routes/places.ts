@@ -1,7 +1,7 @@
 import type { Hono } from "hono";
 import { requireAuth } from "../auth";
 import { requireCsrf, parseId } from "../middleware";
-import { listPlaces, updatePlace, deletePlace } from "../db";
+import { listPlaces, updatePlace, deletePlace, storeFrom } from "../db";
 import { OWNER_ID } from "../bindings";
 import { LOCATION_MAX_LEN } from "../posts";
 import type { AppEnv } from "../bindings";
@@ -10,7 +10,7 @@ import type { AppEnv } from "../bindings";
 // pide al cargar para autorrellenar el nombre cuando capturas GPS cerca de uno.
 export function registerPlaceRoutes(app: Hono<AppEnv>) {
   app.get("/api/places", requireAuth(), async (c) => {
-    return c.json(await listPlaces(c.env.DB));
+    return c.json(await listPlaces(storeFrom(c.env)));
   });
 
   app.patch("/api/places/:id", requireAuth(), requireCsrf(), async (c) => {
@@ -26,7 +26,7 @@ export function registerPlaceRoutes(app: Hono<AppEnv>) {
     if (!name) return c.json({ error: "nombre vacio" }, 400);
     const raw = Number(body.radius);
     const radius = Number.isFinite(raw) && raw >= 10 && raw <= 100000 ? raw : 150;
-    const updated = await updatePlace(c.env.DB, id, { name, radius }, OWNER_ID);
+    const updated = await updatePlace(storeFrom(c.env), id, { name, radius }, OWNER_ID);
     if (!updated) return c.json({ error: "no encontrado" }, 404);
     return c.json(updated);
   });
@@ -34,7 +34,7 @@ export function registerPlaceRoutes(app: Hono<AppEnv>) {
   app.delete("/api/places/:id", requireAuth(), requireCsrf(), async (c) => {
     const id = parseId(c.req.param("id"));
     if (id === null) return c.json({ error: "id invalido" }, 400);
-    const ok = await deletePlace(c.env.DB, id, OWNER_ID);
+    const ok = await deletePlace(storeFrom(c.env), id, OWNER_ID);
     if (!ok) return c.json({ error: "no encontrado" }, 404);
     return c.json({ ok: true });
   });

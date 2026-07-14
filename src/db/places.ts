@@ -1,4 +1,5 @@
 import { haversineMeters } from "../geo";
+import type { Store } from "./store";
 
 export interface PlaceRow {
   id: number;
@@ -10,67 +11,70 @@ export interface PlaceRow {
   created_at: string;
 }
 
-export async function listPlaces(db: D1Database): Promise<PlaceRow[]> {
-  const res = await db
-    .prepare("SELECT * FROM places ORDER BY id")
-    .all<PlaceRow>();
-  return res.results;
+export async function listPlaces(store: Store): Promise<PlaceRow[]> {
+  const data = await store.data();
+  return [...data.places].sort((a, b) => a.id - b.id);
 }
 
 export async function createPlace(
-  db: D1Database,
+  store: Store,
   name: string,
   lat: number,
   lng: number,
   radius = 150,
   owner = "me",
 ): Promise<PlaceRow> {
-  const row = await db
-    .prepare(
-      "INSERT INTO places (name, lat, lng, radius, owner) VALUES (?, ?, ?, ?, ?) RETURNING *",
-    )
-    .bind(name, lat, lng, radius, owner)
-    .first<PlaceRow>();
-  return row!;
+  const data = await store.data();
+  const place: PlaceRow = {
+    id: ++data.seq.place,
+    name,
+    lat,
+    lng,
+    radius,
+    owner,
+    created_at: new Date().toISOString(),
+  };
+  data.places.push(place);
+  await store.save();
+  return place;
 }
 
-// Renombra / ajusta el radio de un sitio, SOLO si pertenece a `owner`. El check
-// de owner va en el WHERE para que sea atómico.
+// Renombra / ajusta el radio de un sitio, SOLO si pertenece a `owner`.
 export async function updatePlace(
-  db: D1Database,
+  store: Store,
   id: number,
   fields: { name: string; radius: number },
   owner = "me",
 ): Promise<PlaceRow | null> {
-  const row = await db
-    .prepare(
-      "UPDATE places SET name = ?, radius = ? WHERE id = ? AND owner = ? RETURNING *",
-    )
-    .bind(fields.name, fields.radius, id, owner)
-    .first<PlaceRow>();
-  return row ?? null;
+  const data = await store.data();
+  const place = data.places.find((p) => p.id === id && p.owner === owner);
+  if (!place) return null;
+  place.name = fields.name;
+  place.radius = fields.radius;
+  await store.save();
+  return place;
 }
 
 export async function deletePlace(
-  db: D1Database,
+  store: Store,
   id: number,
   owner = "me",
 ): Promise<boolean> {
-  const res = await db
-    .prepare("DELETE FROM places WHERE id = ? AND owner = ?")
-    .bind(id, owner)
-    .run();
-  return (res.meta?.changes ?? 0) > 0;
+  const data = await store.data();
+  const idx = data.places.findIndex((p) => p.id === id && p.owner === owner);
+  if (idx === -1) return false;
+  data.places.splice(idx, 1);
+  await store.save();
+  return true;
 }
 
 // Devuelve el primer sitio guardado cuyo radio contiene el punto dado, o null.
-// La tabla es pequeña (single-user) → cargarla entera y filtrar en memoria basta.
 export async function findNearbyPlace(
-  db: D1Database,
+  store: Store,
   lat: number,
   lng: number,
 ): Promise<PlaceRow | null> {
-  const places = await listPlaces(db);
+  const places = await listPlaces(store);
   for (const p of places) {
     if (haversineMeters(lat, lng, p.lat, p.lng) <= p.radius) return p;
   }

@@ -12,8 +12,12 @@ dejar lo esencial. Color de resalte: **plata** en vez del amarillo original.
 ## Stack
 
 - **Cloudflare Workers** (Hono, TypeScript) — `src/`
-- **D1** (SQLite) para posts/media/hashtags/places
-- **R2** para las fotos (servidas vía `/r2/*`)
+- **R2** para todo: las fotos bajo `images/` (servidas vía `/r2/*`) y los datos
+  (posts/media/hashtags/places) como un único JSON privado en `data/db.json`.
+  Sin D1: la BD entera pesa decenas de KB y escribe una sola persona, así que
+  cada request carga el JSON, opera en memoria y persiste el estado completo.
+  Antes de la primera escritura de cada día se guarda una copia en
+  `data/backups/db-YYYY-MM-DD.json`.
 - Frontend **vanilla JS** (ES modules) + CSS en partials (`public/css/*.css`, enlazados por página)
 - Sin framework, sin bundler.
 
@@ -23,16 +27,22 @@ dejar lo esencial. Color de resalte: **plata** en vez del amarillo original.
 npm install
 # secretos locales (gitignored)
 printf 'PASSWORD="lo-que-quieras"\nAUTH_SECRET="%s"\n' "$(openssl rand -hex 32)" > .dev.vars
-npm run db:schema        # aplica schema.sql a la D1 local
 npm run dev              # wrangler dev en http://localhost:8787
+```
+
+No hay schema que aplicar: el R2 local arranca vacío y el primer post crea
+`data/db.json`. Para desarrollar con datos reales, descarga el JSON de prod y
+súbelo al R2 local:
+
+```bash
+npx wrangler r2 object get bici-storage/data/db.json --remote --file db.json
+npx wrangler r2 object put bici-storage/data/db.json --local --file db.json
 ```
 
 ## Despliegue (Cloudflare Workers)
 
 ```bash
-npm run db:create            # crea bici-db; copia el database_id a wrangler.toml
 npm run r2:create            # crea bici-storage
-npm run db:schema:remote     # aplica schema.sql a la D1 de producción
 npx wrangler secret put PASSWORD     # contraseña de acceso
 npx wrangler secret put AUTH_SECRET  # secreto para firmar la sesión (HMAC)
 npm run deploy               # despliega + activa el dominio de wrangler.toml
@@ -54,16 +64,15 @@ npm test    # vitest
 src/
   index.ts          ensamblador Hono (registra las rutas en orden)
   routes/           auth, posts, places, upload, static (una función registerX por archivo)
-  bindings.ts       tipos de bindings (D1/R2/ASSETS/rate-limit) + OWNER_ID
+  bindings.ts       tipos de bindings (R2/ASSETS/rate-limit) + OWNER_ID
   middleware.ts     requireCsrf, rateLimit, parseId
   posts.ts          validatePostBody / persistPost (sin HTTP)
-  db/               data layer D1 por entidad: posts, media, hashtags, places, export + shared (helpers) + index (barrel)
+  db/               data layer (JSON en R2) por entidad: posts, media, hashtags, places, export + store (persistencia) + shared (helpers) + index (barrel)
   media.ts, auth.ts, geo.ts, hashtags.ts
 public/
   index.html, compose.html, login.html, places.html, aviso-legal.html
   app.js, compose.js, places.js
   js/               módulos ES (render, gallery, rails*, composer*, etc.)
   css/              partials por sección, enlazados por página (base primero)
-schema.sql          esquema de la D1 (fuente única para crear la BD desde cero)
 wrangler.toml       config del Worker (bindings, dominio, rate limit)
 ```

@@ -1,3 +1,5 @@
+import type { Store } from "./db";
+
 const TAG_RE = /#([\p{L}\p{N}_]+)/gu;
 
 export function extractHashtags(text: string | null | undefined): string[] {
@@ -10,15 +12,13 @@ export function extractHashtags(text: string | null | undefined): string[] {
 }
 
 export async function syncHashtags(
-  db: D1Database,
+  store: Store,
   postId: number,
   text: string | null,
 ) {
-  const tags = extractHashtags(text);
-  await db.prepare("DELETE FROM hashtags WHERE post_id = ?").bind(postId).run();
-  if (tags.length === 0) return;
-  const stmt = db.prepare(
-    "INSERT OR IGNORE INTO hashtags (post_id, tag) VALUES (?, ?)",
-  );
-  await db.batch(tags.map((t) => stmt.bind(postId, t)));
+  const data = await store.data();
+  const post = data.posts.find((p) => p.id === postId);
+  if (!post) return;
+  post.hashtags = extractHashtags(text);
+  await store.save();
 }

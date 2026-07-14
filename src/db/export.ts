@@ -1,26 +1,19 @@
-export async function exportAll(db: D1Database) {
-  // Solo posts vivos: el resto de queries filtran deleted_at IS NULL; el export
-  // respeta el mismo contrato. media/hashtags cuelgan por post_id; excluimos los
-  // hijos de posts borrados con un subselect.
-  const [posts, media, hashtags, places] = await Promise.all([
-    db.prepare("SELECT * FROM posts WHERE deleted_at IS NULL ORDER BY id").all(),
-    db
-      .prepare(
-        "SELECT * FROM media WHERE post_id IN (SELECT id FROM posts WHERE deleted_at IS NULL) ORDER BY post_id, position",
-      )
-      .all(),
-    db
-      .prepare(
-        "SELECT * FROM hashtags WHERE post_id IN (SELECT id FROM posts WHERE deleted_at IS NULL) ORDER BY post_id, tag",
-      )
-      .all(),
-    db.prepare("SELECT * FROM places ORDER BY id").all(),
-  ]);
+import { isLive } from "./shared";
+import type { Store } from "./store";
+
+// Solo posts vivos: el resto de queries filtran deleted_at IS NULL; el export
+// respeta el mismo contrato. Mantiene la forma plana (posts/media/hashtags/
+// places como tablas) de los exports históricos de la época D1.
+export async function exportAll(store: Store) {
+  const data = await store.data();
+  const live = data.posts.filter(isLive).sort((a, b) => a.id - b.id);
   return {
     exported_at: new Date().toISOString(),
-    posts: posts.results,
-    media: media.results,
-    hashtags: hashtags.results,
-    places: places.results,
+    posts: live.map(({ media: _m, hashtags: _h, ...row }) => row),
+    media: live.flatMap((p) => p.media),
+    hashtags: live.flatMap((p) =>
+      [...p.hashtags].sort().map((tag) => ({ post_id: p.id, tag })),
+    ),
+    places: [...data.places].sort((a, b) => a.id - b.id),
   };
 }

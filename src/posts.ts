@@ -2,6 +2,7 @@
 // Exportado para testear la lógica aislada del transporte (test/post-handler).
 
 import { attachMedia, createPlace, createPost, findNearbyPlace } from "./db";
+import type { Store } from "./db";
 import { syncHashtags } from "./hashtags";
 import { OWNER_ID } from "./bindings";
 
@@ -49,7 +50,7 @@ type PostValidation =
 // persistir, o el primer error con su status. Async porque comprueba en BD que
 // el parent exista.
 export async function validatePostBody(
-  db: D1Database,
+  store: Store,
   body: PostBody,
 ): Promise<PostValidation> {
   const text = (body.text ?? "").trim() || null;
@@ -72,10 +73,10 @@ export async function validatePostBody(
   }
 
   if (body.parent_id != null) {
-    const parent = await db
-      .prepare("SELECT id FROM posts WHERE id = ? AND deleted_at IS NULL")
-      .bind(body.parent_id)
-      .first<{ id: number }>();
+    const data = await store.data();
+    const parent = data.posts.find(
+      (p) => p.id === body.parent_id && p.deleted_at == null,
+    );
     if (!parent) return { ok: false, error: "parent no existe", status: 404 };
   }
 
@@ -115,7 +116,7 @@ function parseCoords(rawLat: unknown, rawLng: unknown): { lat: number | null; ln
 // Persiste un post ya validado (fila + media + hashtags). Devuelve el id del
 // post creado.
 export async function persistPost(
-  db: D1Database,
+  store: Store,
   v: {
     text: string | null;
     media: MediaInput[];
@@ -125,17 +126,17 @@ export async function persistPost(
     lng: number | null;
   },
 ): Promise<number> {
-  const post = await createPost(db, v.text, v.parentId, v.location, v.lat, v.lng);
-  await attachMedia(db, post.id, v.media);
-  await syncHashtags(db, post.id, v.text);
+  const post = await createPost(store, v.text, v.parentId, v.location, v.lat, v.lng);
+  await attachMedia(store, post.id, v.media);
+  await syncHashtags(store, post.id, v.text);
 
   // Geofence: si el post trae ubicación CON NOMBRE + coords y no hay ya un sitio
   // guardado dentro de su radio, lo guardamos para autorrellenar la próxima vez.
   // En try/catch: un fallo aquí nunca debe tumbar la publicación.
   if (v.location && v.lat != null && v.lng != null) {
     try {
-      const near = await findNearbyPlace(db, v.lat, v.lng);
-      if (!near) await createPlace(db, v.location, v.lat, v.lng, 150, OWNER_ID);
+      const near = await findNearbyPlace(store, v.lat, v.lng);
+      if (!near) await createPlace(store, v.location, v.lat, v.lng, 150, OWNER_ID);
     } catch (err) {
       console.error("auto-save place failed:", err);
     }

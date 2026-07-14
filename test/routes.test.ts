@@ -1,19 +1,18 @@
 // Tests de los endpoints HTTP vía app.request(path, init, env): cubren la capa
 // que los tests de db.ts no tocan — auth (requireAuth), CSRF (requireCsrf), el
-// rate-limit middleware y el flujo de publicar/sitios. El env lleva el adapter
-// D1 (better-sqlite3) + stubs de los bindings que las rutas usan.
+// rate-limit middleware y el flujo de publicar/sitios. El env lleva un R2 fake
+// en STORAGE (donde ahora viven datos + fotos) + stubs del resto de bindings.
 import { describe, it, expect, beforeEach } from 'vitest';
 import app from '../src/index';
-import { makeTestDb } from './helpers/d1';
+import { makeBucket } from './helpers/r2';
 import { makeToken } from '../src/auth';
 
 const SECRET = 'test-secret-1234567890';
 const okLimiter = { limit: async () => ({ success: true }) };
 
-function makeEnv(db: D1Database) {
+function makeEnv(bucket: R2Bucket) {
   return {
-    DB: db,
-    STORAGE: {} as unknown as R2Bucket,
+    STORAGE: bucket,
     ASSETS: {} as unknown as Fetcher,
     PASSWORD: 'dev',
     AUTH_SECRET: SECRET,
@@ -25,11 +24,9 @@ async function authCookie() {
   return `bici_auth=${await makeToken(SECRET)}`;
 }
 
-let db: D1Database;
 let env: ReturnType<typeof makeEnv>;
 beforeEach(() => {
-  db = makeTestDb();
-  env = makeEnv(db);
+  env = makeEnv(makeBucket());
 });
 
 describe('POST /api/posts (auth + CSRF)', () => {

@@ -2,7 +2,7 @@ import type { Hono } from "hono";
 import { requireAuth } from "../auth";
 import { requireCsrf, rateLimit } from "../middleware";
 import { buildMediaKey, classifyContentType, maxBytesFor } from "../media";
-import { exportAll } from "../db";
+import { exportAll, storeFrom } from "../db";
 import type { AppEnv } from "../bindings";
 
 export function registerUploadRoutes(app: Hono<AppEnv>) {
@@ -34,7 +34,7 @@ export function registerUploadRoutes(app: Hono<AppEnv>) {
   });
 
   app.get("/api/export", requireAuth(), async (c) => {
-    const dump = await exportAll(c.env.DB);
+    const dump = await exportAll(storeFrom(c.env));
     return new Response(JSON.stringify(dump, null, 2), {
       headers: {
         "content-type": "application/json",

@@ -6,7 +6,8 @@ export interface RateLimit {
 }
 
 export type Bindings = {
-  DB: D1Database;
+  // Datos + fotos en el MISMO bucket R2: las fotos bajo images/ (públicas vía
+  // /r2/*), el JSON de datos bajo data/ (privado). Ver src/db/store.ts.
   STORAGE: R2Bucket;
   ASSETS: Fetcher;
   PASSWORD: string;

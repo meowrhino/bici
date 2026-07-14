@@ -1,5 +1,7 @@
+import type { Store } from "./store";
+
 export async function attachMedia(
-  db: D1Database,
+  store: Store,
   postId: number,
   items: Array<{
     kind: "image";
@@ -10,12 +12,18 @@ export async function attachMedia(
   }>,
 ) {
   if (items.length === 0) return;
-  const stmt = db.prepare(
-    "INSERT INTO media (post_id, kind, r2_key, thumb_key, width, height, position) VALUES (?, ?, ?, ?, ?, ?, ?)",
-  );
-  await db.batch(
-    items.map((m, i) =>
-      stmt.bind(postId, m.kind, m.r2_key, m.thumb_key, m.width, m.height, i),
-    ),
-  );
+  const data = await store.data();
+  const post = data.posts.find((p) => p.id === postId);
+  if (!post) return;
+  post.media = items.map((m, i) => ({
+    id: ++data.seq.media,
+    post_id: postId,
+    kind: m.kind,
+    r2_key: m.r2_key,
+    thumb_key: m.thumb_key,
+    width: m.width,
+    height: m.height,
+    position: i,
+  }));
+  await store.save();
 }

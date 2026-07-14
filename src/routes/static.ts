@@ -7,6 +7,10 @@ export function registerStaticRoutes(app: Hono<AppEnv>) {
   // ---------- R2 serving (public, like images on twitter) ----------
   app.get("/r2/*", async (c) => {
     const key = c.req.path.replace(/^\/r2\//, "");
+    // Solo el prefijo de fotos es público. En el mismo bucket vive data/ (el
+    // JSON de la BD + backups), que contiene la papelera y las coords de tus
+    // sitios — NUNCA debe servirse por aquí.
+    if (!key.startsWith("images/")) return c.notFound();
     const obj = await c.env.STORAGE.get(key);
     if (!obj) return c.notFound();
     const headers = new Headers();
