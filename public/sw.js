@@ -11,7 +11,7 @@
 // Las peticiones que no son GET y las cross-origin pasan directas a la red.
 // Subir CACHE_VERSION invalida las cachés antiguas en el evento `activate`.
 
-const CACHE_VERSION = "bici-v1";
+const CACHE_VERSION = "bici-v2";
 
 // Mínimo para que la app arranque sin conexión. El resto de estáticos se
 // cachean solos la primera vez que se cargan online (stale-while-revalidate).

@@ -10,7 +10,7 @@
 // Las barras de acciones (responder/ocultar/borrar/ver sitio) y sus handlers
 // viven en post-actions.js — render.js sólo invoca su API.
 
-import { fmt, hoursAgo, escapeHtml, linkify } from './utils.js';
+import { fmt, fechaHora, escapeHtml, linkify } from './utils.js';
 import { renderPostGallery } from './gallery.js';
 import { isHidden, markPostHidden } from './hidden.js';
 import {
@@ -48,7 +48,7 @@ function renderPostFoot(p, { collapsible = false } = {}) {
   }
   return `
     <div class="post-foot">
-      <a href="#${p.id}" class="permalink" title="${escapeHtml(p.created_at)}"><span class="post-id">#${p.id}</span> · ${hoursAgo(p.created_at)}</a>
+      <a href="#${p.id}" class="permalink" title="${escapeHtml(p.created_at)}"><span class="post-id">#${p.id}</span> · ${fechaHora(p.created_at)}</a>
       ${renderLocation(p)}
       ${respEl}
     </div>
